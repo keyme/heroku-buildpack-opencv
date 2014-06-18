@@ -1,0 +1,29 @@
+#!/bin/sh
+
+workspace_dir=$1
+output_dir=$2
+
+echo "       Downloading source..."
+curl -L http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.3.1/OpenCV-2.3.1a.tar.bz2 -s -o - | tar jx
+
+cd OpenCV*
+mkdir build && cd build
+
+echo "       Building..."
+cmake -D CMAKE_BUILD_TYPE=MINSIZEREL \
+      -D CMAKE_INSTALL_PREFIX=$output_dir \
+      -D OPENCV_CONFIG_FILE_INCLUDE_DIR=$output_dir \
+      -D BUILD_NEW_PYTHON_SUPPORT=OFF \
+      -D INSTALL_PYTHON_EXAMPLES=OFF \
+      -D BUILD_EXAMPLES=OFF \
+      -D BUILD_TESTS=OFF \
+      -D WITH_TBB=ON \
+      -Wno-dev \
+      ..
+
+make
+make install
+
+cd ..
+
+cp -r modules/contrib/include/opencv2/contrib/ $output_dir/include/opencv2/contrib

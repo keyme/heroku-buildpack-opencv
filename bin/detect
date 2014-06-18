@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# bin/detect <build-dir>
+
+set -e
+
+BUILD_DIR=$1
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $DIR/globals $BUILD_DIR
+
+if [ -f $OPENCV_SLUG_FILE ]; then
+  echo "OpenCV"
+  exit 0
+else
+  exit 1
+fi

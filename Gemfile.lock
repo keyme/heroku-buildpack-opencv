@@ -1,0 +1,29 @@
+GIT
+  remote: git://github.com/keyme/hammer.git
+  revision: b6f9a46f8970ac6d2069cda9169985a62109caed
+  ref: add-multipack
+  specs:
+    hammer (0.0.1.pre)
+      anvil-cli (~> 0.15)
+      thor (~> 0.15.0)
+      vise (~> 0.0.1.pre)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    anvil-cli (0.16.1)
+      progress (~> 2.4.0)
+      rest-client (~> 1.6.7)
+      thor (~> 0.15.2)
+    mime-types (2.3)
+    progress (2.4.0)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
+    thor (0.15.4)
+    vise (0.0.1.pre)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  hammer!

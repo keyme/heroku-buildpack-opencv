@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# bin/globals <build-dir>
+
+BUILD_DIR=$1
+
+export OPENCV_DIR=${HOME}/vendor/opencv
+export OPENCV_SLUG_FILE=$BUILD_DIR/.opencv-slug

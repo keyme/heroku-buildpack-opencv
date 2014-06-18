@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir> <env-dir>
+
+set -e
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $DIR/globals $BUILD_DIR
+
+ENV_DIR=$3
+BUILD_DIR=$1
+CACHE_DIR=$2
+PROFILE_D_DIR=$BUILD_DIR/.profile.d
+OPENCV_SLUG=`cat $OPENCV_SLUG_FILE`
+PROFILE_D_SCRIPT=$PROFILE_D_DIR/opencv.sh
+PC_FILE=$OPENCV_DIR/lib/pkgconfig/opencv.pc
+
+echo "-----> Downloading OpenCV..."
+echo "       Slug Location: \`$OPENCV_SLUG'"
+
+# Make output directory.
+mkdir -p $OPENCV_DIR
+
+# Download into output directory.
+curl $OPENCV_SLUG -s -o - | tar -xz -C $OPENCV_DIR
+
+echo "       Creating Environment..."
+
+mkdir $PROFILE_D_DIR
+touch $PROFILE_D_SCRIPT
+
+echo "export PATH=\"$OPENCV_DIR/bin:\$PATH\"" >> $PROFILE_D_SCRIPT
+echo "export LD_LIBRARY_PATH=\"$OPENCV_DIR/lib:\$LD_LIBRARY_PATH\"" >> $PROFILE_D_SCRIPT
+echo "export PKG_CONFIG_PATH=\"$OPENCV_DIR/lib/pkgconfig/\"" >> $PROFILE_D_SCRIPT
+echo "export C_INCLUDE_PATH=\"$OPENCV_DIR/include/:$OPENCV_DIR/include/opencv/:$OPENCV_DIR/include/opencv2/\"" >> $PROFILE_D_SCRIPT
+echo "export CPLUS_INCLUDE_PATH=\"$OPENCV_DIR/include/:$OPENCV_DIR/include/opencv:$OPENCV_DIR/include/opencv2/\"" >> $PROFILE_D_SCRIPT
+
+echo "       Customizing OpenCV..."
+
+sed -ie 's~prefix=.*~prefix='$OPENCV_DIR'~g' $PC_FILE
+
+source $PROFILE_D_SCRIPT
